@@ -1,0 +1,57 @@
+RPi:
+(LED 1:)
+- Powered & Online --- green
+- Powered - No Network --- blinking orange
+- Error --- blinking red
+
+Reboot/shutdown:
+(LED 2:)
+- reboot - waiting confirmation --- blinking yellow
+- reboot - yellow
+- shutdown - waiting confirmation --- blinking red
+- shutdown - red
+
+Sensor:
+(LED 3:)
+- auto - enabled --- green
+- auto - measuring --- blinking blue
+- auto - disabled - waiting confirmation --- blinking orange
+- auto - disabled --- red
+(LED 4:)
+- manual - measuring - waiting confirmation --- blinking green
+- manual - measuring --- blinking blue
+(LED 5:)
+- Error --- blinking red
+
+Relay:
+(LED 6:)
+- auto - enabled --- green
+- auto - active --- blinking blue
+- auto - disabled - waiting confirmation --- blinking orange
+- auto - disabled --- red
+(LED 7:)
+- manual - active - waiting confirmation --- blinking green
+- manual - active --- blinking blue
+(LED 8:)
+- Error --- blinking red
+
+==============================
+
+Buttons:
+A: Reboot/shutdown via script
+B: Enable/Disable sensor auto
+C: Measure manually
+D: Enable/Disable relay auto
+E: Enable/Disable relay manually
+
+==============================
+
+Sensor :
+- Start from button
+- Start from App
+- Stop from self
+
+Relay : 
+- Start from button
+- Start from App
+- Stop from App
