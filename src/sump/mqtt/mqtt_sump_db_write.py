@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 from core.measurement import Measurement, MeasurementDecoder
+from mqtt.exceptions import InvalidTopicError
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
 from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
@@ -24,6 +25,8 @@ class MQTTSumpDBWrite(MQTTSubscriberBase):
         elif current_topic == SystemStatusItem().__class__.__name__:
             received_data = json.loads(message.payload.decode(), cls=SystemStatusItemDecoder)
             received_data.save_to_db()
+        else:
+            raise InvalidTopicError(message.topic)
 
 if __name__ == '__main__':
     MQTTSumpDBWrite().start()

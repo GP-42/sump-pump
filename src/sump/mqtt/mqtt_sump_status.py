@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+from mqtt.exceptions import InvalidTopicError
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
 from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
@@ -34,6 +35,8 @@ class MQTTSumpStatus(MQTTSubscriberBase):
                                 LED_to_update.current_status_color.g == self.VALUE_ZERO and LED_to_update.current_status_color.b == self.VALUE_ZERO) else self.BRIGHTNESS)
             
             blinkt.show()
+        else:
+            raise InvalidTopicError(message.topic)
     
     def blink_pixels(self):
         try:
