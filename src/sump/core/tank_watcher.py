@@ -5,6 +5,7 @@ from core.hcsr04_sensor import Hcsr04Sensor
 #A02YYUW_sensor
 #from core.A02YYUW_sensor import DFRobot_A02_Distance
 from core.measurement import Measurement
+from utilities.configuration.toml.toml_configuration import TomlConfiguration
 
 #A02YYUW_sensor
 #import time
@@ -12,11 +13,6 @@ import RPi.GPIO as gpio
 import statistics
 
 class TankWatcher:
-    #hcsr04_sensor
-    SENSOR_HEIGHT = 54.0
-    #A02YYUW_sensor
-    #SENSOR_HEIGHT = 52.0
-
     @staticmethod
     def log_water_depth(sensor, sensor_height, automatic) -> Measurement:
             """
@@ -67,12 +63,10 @@ class TankWatcher:
         
     @staticmethod
     def measure(automatic = False) -> Measurement:
-        # print("sensor_height : ", self.SENSOR_HEIGHT)
-        
         try:
-            # hcsr04_sensor = sensor.Hcsr04Sensor(gpio.BCM, 23, 24)
-            hcsr04_sensor = Hcsr04Sensor(gpio.BCM, 17, 27)
-            result = TankWatcher.log_water_depth(hcsr04_sensor, TankWatcher.SENSOR_HEIGHT, automatic)
+            config = TomlConfiguration()
+            hcsr04_sensor = Hcsr04Sensor(config.Hcsr04Sensor.gpio_mode, config.Hcsr04Sensor.gpio_trigger_pin, config.Hcsr04Sensor.gpio_echo_pin)
+            result = TankWatcher.log_water_depth(hcsr04_sensor, config.TankWatcher.sensor_height, automatic)
 
             # A02YYUW_sensor = DFRobot_A02_Distance()
             # A02YYUW_sensor.set_dis_range(0,4500)

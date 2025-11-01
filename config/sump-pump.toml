@@ -1,0 +1,71 @@
+[Hcsr04Sensor]
+gpio_mode = 11 # 10 : gpio.BOARD / 11 : gpio.BCM
+gpio_trigger_pin = 17
+gpio_echo_pin = 27
+
+[TankWatcher]
+sensor_height = 54.0
+
+[SumpOperations]
+gpio_mode = 11 # 10 : gpio.BOARD / 11 : gpio.BCM
+gpio_led_pin = 6
+gpio_button_pin = 5
+
+[RelayModule]
+gpio_mode = 11 # 10 : gpio.BOARD / 11 : gpio.BCM
+gpio_pins = [22]
+
+[MQTTSumpProcessor]
+reboot_shutdown_timer_no_return = 160 # in seconds; preferably 20 seconds before reboot/shutdown
+confirmation_timer_duration = 30 # in seconds
+confirmation_delay = 3 # in seconds; preferably equal to the delay of the long press (= in code)
+host = "domotica"
+port = 1883
+client_id = "Processor"
+subscription_topic = "Sump/Command/+/+"
+message_qos = 2
+publisher_root_topic = "Sump/"
+
+[MQTTSumpStatus]
+host = "domotica"
+port = 1883
+client_id = "StatusSubscriber"
+subscription_topic = "Sump/LED/+"
+message_qos = 2
+
+[MQTTSumpDBWrite]
+host = "domotica"
+port = 1883
+client_id = "DBWriteSubscriber"
+subscription_topic = "Sump/DB/+"
+message_qos = 2
+
+[MQTTSumpRPi]
+reboot_shutdown_delay = 3 # in minutes
+host = "domotica"
+port = 1883
+client_id = "RPiSubscriber"
+subscription_topic = "Sump/RPi"
+message_qos = 2
+
+[MQTTSumpTankWatcher]
+host = "domotica"
+port = 1883
+client_id = "TankWatcher"
+publisher_root_topic = "Sump/"
+message_qos = 2
+subscription_topic = "Sump/Sensor/+"
+
+[MQTTSumpRelay]
+host = "domotica"
+port = 1883
+client_id = "RelaySubscriber"
+subscription_topic = "Sump/Relay"
+message_qos = 2
+
+[MQTTSumpButtons]
+host = "domotica"
+port = 1883
+client_id = "ButtonPublisher"
+publisher_root_topic = "Sump/Command/Button/"
+message_qos = 2

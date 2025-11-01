@@ -1,10 +1,10 @@
 #! /usr/bin/python3
 
 from core.relay_module import RelayEncoder, RelayModule
-from mqtt.constants import Constants
 from mqtt.exceptions import InvalidTopicError
 from mqtt.mqtt_publisher_base import MQTTPublisherBase
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import ButtonState, DeviceStatus, GeneralStatus, LEDnames, SystemStatus, SystemStatusItemEncoder
 
 import json
@@ -13,18 +13,15 @@ import threading
 import time
 
 class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
-    REBOOT_SHUTDOWN_TIMER_NO_RETURN = 160 # 20 seconds before reboot/shutdown
-    CONFIRMATION_TIMER_DURATION = 30
-    CONFIRMATION_DELAY = 3 # Equal to the delay of the long press
-    
     def __init__(self) -> None:
-        super().__init__(Constants.MQTT_HOST, Constants.MQTT_PORT, "Processor", "Sump/Command/+/+", 2)
-        self.publisher_root_topic = "Sump/"
+        self.config = TomlConfiguration()
+        super().__init__(self.config.MQTTSumpProcessor.host, self.config.MQTTSumpProcessor.port, self.config.MQTTSumpProcessor.client_id, self.config.MQTTSumpProcessor.subscription_topic, self.config.MQTTSumpProcessor.message_qos)
+        self.publisher_root_topic = self.config.MQTTSumpProcessor.publisher_root_topic
         self.system_status = SystemStatus()
         self.initialize_system_status()
         self.timed_status = DeviceStatus.get_status_requiring_confirmation()
         self.active_timers = {}
-        self.relay_module = RelayModule(gpio.BCM, [22])
+        self.relay_module = RelayModule(self.config.RelayModule.gpio_mode, self.config.RelayModule.gpio_pins)
     
     def on_message_callback(self, client, userdata, message):
         # print(f"Message topic: {message.topic}")
@@ -141,7 +138,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         
         if system_status_item.name in self.active_timers:
             start_time, timer_thread, stop_event = self.active_timers.get(system_status_item.name, (None, None, None))
-            delay_is_active = time.time() - start_time < self.CONFIRMATION_DELAY
+            delay_is_active = time.time() - start_time < self.config.MQTTSumpProcessor.confirmation_delay
         
         return delay_is_active
     
@@ -166,7 +163,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         self.cancel_action_and_post(system_status_item)
     
     def timer(self, system_status_item, stop_event, start_time):
-        while time.time() - start_time < self.CONFIRMATION_TIMER_DURATION:
+        while time.time() - start_time < self.config.MQTTSumpProcessor.confirmation_timer_duration:
             if stop_event.is_set():
                 return
             time.sleep(0.1)
@@ -176,7 +173,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         del self.active_timers[system_status_item.name]
     
     def reboot_shutdown_timer(self, system_status_item, stop_event, start_time):
-        while time.time() - start_time < self.REBOOT_SHUTDOWN_TIMER_NO_RETURN:
+        while time.time() - start_time < self.config.MQTTSumpProcessor.reboot_shutdown_timer_no_return:
             if stop_event.is_set():
                 return
             time.sleep(0.1)

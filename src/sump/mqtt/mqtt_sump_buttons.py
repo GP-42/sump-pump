@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
-from mqtt.constants import Constants
 from mqtt.mqtt_publisher_base import MQTTPublisherBase
+from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import ButtonState
 
 import buttonshim
@@ -10,30 +10,31 @@ import signal
 
 class MQTTSumpButtons(MQTTPublisherBase):
     def __init__(self) -> None:
-        super().__init__(Constants.MQTT_HOST, Constants.MQTT_PORT, "ButtonPublisher", "Sump/Command/Button/", 2)
+        self.config = TomlConfiguration()
+        super().__init__(self.config.MQTTSumpButtons.host, self.config.MQTTSumpButtons.port, self.config.MQTTSumpButtons.client_id, self.config.MQTTSumpButtons.publisher_root_topic, self.config.MQTTSumpButtons.message_qos)
         
-        self.gpio_mode = gpio.BCM
-        self.ledPin = 6
-        self.buttonPin = 5
+        self.gpio_mode = self.config.SumpOperations.gpio_mode
+        self.led_pin = self.config.SumpOperations.gpio_led_pin
+        self.button_pin = self.config.SumpOperations.gpio_button_pin
         
         gpio.setmode(self.gpio_mode)
-        gpio.setup(self.ledPin, gpio.OUT)
-        gpio.setup(self.buttonPin, gpio.IN, gpio.PUD_UP)
+        gpio.setup(self.led_pin, gpio.OUT)
+        gpio.setup(self.button_pin, gpio.IN, gpio.PUD_UP)
     
     def operations_button_callback(self, btn):
-        button_pressed = gpio.input(self.buttonPin) == gpio.LOW
+        button_pressed = gpio.input(self.button_pin) == gpio.LOW
         global operationsButtonActivated
         operationsButtonActivated = button_pressed
-        gpio.output(self.ledPin, button_pressed)
+        gpio.output(self.led_pin, button_pressed)
     
     def start(self):
-        gpio.add_event_detect(self.buttonPin, gpio.BOTH, self.operations_button_callback)
+        gpio.add_event_detect(self.button_pin, gpio.BOTH, self.operations_button_callback)
         
         try:
             while True:
                 signal.pause()
         finally:
-            gpio.remove_event_detect(self.buttonPin)
+            gpio.remove_event_detect(self.button_pin)
             gpio.cleanup()
     
     def post_message_helper(self, index):

@@ -1,19 +1,7 @@
 #! /usr/bin/python3
 
 from dotenv import dotenv_values
-from utilities.singleton import ThreadSafeSingletonMeta
-
-# import threading
-
-class ConfigurationBase(metaclass=ThreadSafeSingletonMeta):
-    config = None
-
-    def __init__(self) -> None:
-        if self.config is None:
-            self.reload()
-    
-    def reload(self):
-        pass
+from utilities.configuration.configuration_base import ConfigurationBase
 
 class EnvConfiguration(ConfigurationBase):
     # _instance = None
@@ -43,3 +31,11 @@ class EnvConfiguration(ConfigurationBase):
     
     def reload(self):
         self.config = dotenv_values(dotenv_path="../../config/.env")
+    
+    @property
+    def MQTTUser(self):
+        return self.config["MQTT_USER"]
+    
+    @property
+    def MQTTPassword(self):
+        return self.config["MQTT_PWD"]

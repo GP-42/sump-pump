@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-from utilities.configuration import EnvConfiguration
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 
 import paho.mqtt.client as mqtt
 
@@ -54,7 +54,7 @@ class MQTTManager:
     def publish(self, topic, message, retain):
         try:
             config = EnvConfiguration()
-            self.client.username_pw_set(config["MQTT_USER"], config["MQTT_PWD"])
+            self.client.username_pw_set(config.MQTTUser, config.MQTTPassword)
 
             self.client.connect(self.hostname, self.broker_port)
 
@@ -76,7 +76,7 @@ class MQTTManager:
             self.topic = topic
             
             config = EnvConfiguration()
-            self.client.username_pw_set(config["MQTT_USER"], config["MQTT_PWD"])
+            self.client.username_pw_set(config.MQTTUser, config.MQTTPassword)
 
             self.client.connect(self.hostname, self.broker_port)
 
