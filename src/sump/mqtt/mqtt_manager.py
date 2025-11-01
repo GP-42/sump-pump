@@ -1,12 +1,12 @@
 #! /usr/bin/python3
-from utilities.configuration.classic.env_configuration import EnvConfiguration
-
 import paho.mqtt.client as mqtt
 
 class MQTTManager:
-    def __init__(self, hostname, broker_port, client_id, clean_session) -> None:
+    def __init__(self, hostname, broker_port, mqtt_user, mqtt_password, client_id, clean_session) -> None:
         self.hostname = hostname
         self.broker_port = broker_port
+        self.mqtt_user = mqtt_user
+        self.mqtt_password = mqtt_password
         self.client_id = client_id
         self.clean_session = clean_session
         self.client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id=client_id, clean_session=clean_session)
@@ -53,8 +53,7 @@ class MQTTManager:
     
     def publish(self, topic, message, retain):
         try:
-            config = EnvConfiguration()
-            self.client.username_pw_set(config.MQTTUser, config.MQTTPassword)
+            self.client.username_pw_set(self.mqtt_user, self.mqtt_password)
 
             self.client.connect(self.hostname, self.broker_port)
 
@@ -75,8 +74,7 @@ class MQTTManager:
         try:
             self.topic = topic
             
-            config = EnvConfiguration()
-            self.client.username_pw_set(config.MQTTUser, config.MQTTPassword)
+            self.client.username_pw_set(self.mqtt_user, self.mqtt_password)
 
             self.client.connect(self.hostname, self.broker_port)
 

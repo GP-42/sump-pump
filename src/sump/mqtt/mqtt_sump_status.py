@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import find, DeviceStatus, GeneralStatus, StatusLED
 
@@ -15,8 +16,11 @@ class MQTTSumpStatus(MQTTSubscriberBase):
     VALUE_ZERO = 0
     
     def __init__(self) -> None:
-        self.config = TomlConfiguration()
-        super().__init__(self.config.MQTTSumpStatus.host, self.config.MQTTSumpStatus.port, self.config.MQTTSumpStatus.client_id, self.config.MQTTSumpStatus.subscription_topic, self.config.MQTTSumpStatus.message_qos)
+        self.TomlConfig = TomlConfiguration()
+        self.EnvConfig = EnvConfiguration()
+        super().__init__(self.TomlConfig.MQTTSumpStatus.host, self.TomlConfig.MQTTSumpStatus.port, self.EnvConfig.SumpStatusCredentials.MQTTUser, \
+                         self.EnvConfig.SumpStatusCredentials.MQTTPassword, self.TomlConfig.MQTTSumpStatus.client_id, \
+                         self.TomlConfig.MQTTSumpStatus.subscription_topic, self.TomlConfig.MQTTSumpStatus.message_qos)
         self.available_LEDs = []
         blinkt.set_clear_on_exit()
     

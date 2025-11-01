@@ -2,6 +2,7 @@
 
 from core.relay_module import RelayDecoder
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import GeneralStatus
 
@@ -10,8 +11,11 @@ import RPi.GPIO as gpio
 
 class MQTTSumpRelay(MQTTSubscriberBase):
     def __init__(self) -> None:
-        self.config = TomlConfiguration()
-        super().__init__(self.config.MQTTSumpRelay.host, self.config.MQTTSumpRelay.port, self.config.MQTTSumpRelay.client_id, self.config.MQTTSumpRelay.subscription_topic, self.config.MQTTSumpRelay.message_qos)
+        self.TomlConfig = TomlConfiguration()
+        self.EnvConfig = EnvConfiguration()
+        super().__init__(self.TomlConfig.MQTTSumpRelay.host, self.TomlConfig.MQTTSumpRelay.port, self.EnvConfig.SumpRelayCredentials.MQTTUser, \
+                         self.EnvConfig.SumpRelayCredentials.MQTTPassword, self.TomlConfig.MQTTSumpRelay.client_id, \
+                         self.TomlConfig.MQTTSumpRelay.subscription_topic, self.TomlConfig.MQTTSumpRelay.message_qos)
     
     def on_message_callback(self, client, userdata, message):
         received_data = json.loads(message.payload.decode(), cls=RelayDecoder)

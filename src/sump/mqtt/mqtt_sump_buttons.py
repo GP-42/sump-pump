@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 from mqtt.mqtt_publisher_base import MQTTPublisherBase
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import ButtonState
 
@@ -10,12 +11,15 @@ import signal
 
 class MQTTSumpButtons(MQTTPublisherBase):
     def __init__(self) -> None:
-        self.config = TomlConfiguration()
-        super().__init__(self.config.MQTTSumpButtons.host, self.config.MQTTSumpButtons.port, self.config.MQTTSumpButtons.client_id, self.config.MQTTSumpButtons.publisher_root_topic, self.config.MQTTSumpButtons.message_qos)
+        self.TomlConfig = TomlConfiguration()
+        self.EnvConfig = EnvConfiguration()
+        super().__init__(self.TomlConfig.MQTTSumpButtons.host, self.TomlConfig.MQTTSumpButtons.port, self.EnvConfig.SumpButtonsCredentials.MQTTUser, \
+                         self.EnvConfig.SumpButtonsCredentials.MQTTPassword, self.TomlConfig.MQTTSumpButtons.client_id, \
+                         self.TomlConfig.MQTTSumpButtons.publisher_root_topic, self.TomlConfig.MQTTSumpButtons.message_qos)
         
-        self.gpio_mode = self.config.SumpOperations.gpio_mode
-        self.led_pin = self.config.SumpOperations.gpio_led_pin
-        self.button_pin = self.config.SumpOperations.gpio_button_pin
+        self.gpio_mode = self.TomlConfig.SumpOperations.gpio_mode
+        self.led_pin = self.TomlConfig.SumpOperations.gpio_led_pin
+        self.button_pin = self.TomlConfig.SumpOperations.gpio_button_pin
         
         gpio.setmode(self.gpio_mode)
         gpio.setup(self.led_pin, gpio.OUT)

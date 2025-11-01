@@ -4,6 +4,7 @@ from core.relay_module import RelayEncoder, RelayModule
 from mqtt.exceptions import InvalidTopicError
 from mqtt.mqtt_publisher_base import MQTTPublisherBase
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import ButtonState, DeviceStatus, GeneralStatus, LEDnames, SystemStatus, SystemStatusItemEncoder
 
@@ -14,14 +15,17 @@ import time
 
 class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
     def __init__(self) -> None:
-        self.config = TomlConfiguration()
-        super().__init__(self.config.MQTTSumpProcessor.host, self.config.MQTTSumpProcessor.port, self.config.MQTTSumpProcessor.client_id, self.config.MQTTSumpProcessor.subscription_topic, self.config.MQTTSumpProcessor.message_qos)
-        self.publisher_root_topic = self.config.MQTTSumpProcessor.publisher_root_topic
+        self.TomlConfig = TomlConfiguration()
+        self.EnvConfig = EnvConfiguration()
+        super().__init__(self.TomlConfig.MQTTSumpProcessor.host, self.TomlConfig.MQTTSumpProcessor.port, self.EnvConfig.SumpProcessorCredentials.MQTTUser, \
+                         self.EnvConfig.SumpProcessorCredentials.MQTTPassword, self.TomlConfig.MQTTSumpProcessor.client_id, \
+                         self.TomlConfig.MQTTSumpProcessor.subscription_topic, self.TomlConfig.MQTTSumpProcessor.message_qos)
+        self.publisher_root_topic = self.TomlConfig.MQTTSumpProcessor.publisher_root_topic
         self.system_status = SystemStatus()
         self.initialize_system_status()
         self.timed_status = DeviceStatus.get_status_requiring_confirmation()
         self.active_timers = {}
-        self.relay_module = RelayModule(self.config.RelayModule.gpio_mode, self.config.RelayModule.gpio_pins)
+        self.relay_module = RelayModule(self.TomlConfig.RelayModule.gpio_mode, self.TomlConfig.RelayModule.gpio_pins)
     
     def on_message_callback(self, client, userdata, message):
         # print(f"Message topic: {message.topic}")
@@ -138,7 +142,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         
         if system_status_item.name in self.active_timers:
             start_time, timer_thread, stop_event = self.active_timers.get(system_status_item.name, (None, None, None))
-            delay_is_active = time.time() - start_time < self.config.MQTTSumpProcessor.confirmation_delay
+            delay_is_active = time.time() - start_time < self.TomlConfig.MQTTSumpProcessor.confirmation_delay
         
         return delay_is_active
     
@@ -163,7 +167,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         self.cancel_action_and_post(system_status_item)
     
     def timer(self, system_status_item, stop_event, start_time):
-        while time.time() - start_time < self.config.MQTTSumpProcessor.confirmation_timer_duration:
+        while time.time() - start_time < self.TomlConfig.MQTTSumpProcessor.confirmation_timer_duration:
             if stop_event.is_set():
                 return
             time.sleep(0.1)
@@ -173,7 +177,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         del self.active_timers[system_status_item.name]
     
     def reboot_shutdown_timer(self, system_status_item, stop_event, start_time):
-        while time.time() - start_time < self.config.MQTTSumpProcessor.reboot_shutdown_timer_no_return:
+        while time.time() - start_time < self.TomlConfig.MQTTSumpProcessor.reboot_shutdown_timer_no_return:
             if stop_event.is_set():
                 return
             time.sleep(0.1)

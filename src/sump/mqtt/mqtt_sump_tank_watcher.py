@@ -5,6 +5,7 @@ from core.tank_watcher import TankWatcher
 from mqtt.exceptions import InvalidTopicError
 from mqtt.mqtt_publisher_base import MQTTPublisherBase
 from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from utilities.configuration.classic.env_configuration import EnvConfiguration
 from utilities.configuration.toml.toml_configuration import TomlConfiguration
 from utilities.status import DeviceStatus, LEDnames
 
@@ -12,9 +13,12 @@ import json
 
 class MQTTSumpTankWatcher(MQTTPublisherBase, MQTTSubscriberBase):
     def __init__(self) -> None:
-        self.config = TomlConfiguration()
-        super().__init__(self.config.MQTTSumpTankWatcher.host, self.config.MQTTSumpTankWatcher.port, self.config.MQTTSumpTankWatcher.client_id, self.config.MQTTSumpTankWatcher.publisher_root_topic, self.config.MQTTSumpTankWatcher.message_qos)
-        self.subscription_topic = self.config.MQTTSumpTankWatcher.subscription_topic
+        self.TomlConfig = TomlConfiguration()
+        self.EnvConfig = EnvConfiguration()
+        super().__init__(self.TomlConfig.MQTTSumpTankWatcher.host, self.TomlConfig.MQTTSumpTankWatcher.port, self.EnvConfig.SumpTankWatcherCredentials.MQTTUser, \
+                         self.EnvConfig.SumpTankWatcherCredentials.MQTTPassword, self.TomlConfig.MQTTSumpTankWatcher.client_id, \
+                         self.TomlConfig.MQTTSumpTankWatcher.publisher_root_topic, self.TomlConfig.MQTTSumpTankWatcher.message_qos)
+        self.subscription_topic = self.TomlConfig.MQTTSumpTankWatcher.subscription_topic
         self.allowed_topics = [LEDnames.SENSOR_AUTO, LEDnames.SENSOR_MANUAL]
     
     def on_message_callback(self, client, userdata, message):

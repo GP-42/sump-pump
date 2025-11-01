@@ -7,9 +7,11 @@ import time
 import traceback
 
 class MQTTSubscriberBase(metaclass=ABCMeta):
-    def __init__(self, mqtt_host, mqtt_port, client_id, subscription_topic, message_qos) -> None:
+    def __init__(self, mqtt_host, mqtt_port, mqtt_user, mqtt_password, client_id, subscription_topic, message_qos) -> None:
         self.mqtt_host = mqtt_host
         self.mqtt_port = mqtt_port
+        self.mqtt_user = mqtt_user
+        self.mqtt_password = mqtt_password
         self.client_id = client_id
         self.subscription_topic = subscription_topic
         self.message_qos = message_qos
@@ -55,7 +57,7 @@ class MQTTSubscriberBase(metaclass=ABCMeta):
 
             self.start_initializer()
 
-            subscriber = MQTTManager(self.mqtt_host, self.mqtt_port, self.client_id, False)
+            subscriber = MQTTManager(self.mqtt_host, self.mqtt_port, self.mqtt_user, self.mqtt_password, self.client_id, False)
             subscriber.client.on_connect = self.on_connect
             subscriber.client.on_message = self.on_message
 

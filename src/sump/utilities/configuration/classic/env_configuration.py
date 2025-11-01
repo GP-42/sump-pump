@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 from dotenv import dotenv_values
+from utilities.configuration.classic.mqtt_credentials import MQTTCredentials
 from utilities.configuration.configuration_base import ConfigurationBase
 
 class EnvConfiguration(ConfigurationBase):
@@ -33,9 +34,29 @@ class EnvConfiguration(ConfigurationBase):
         self.config = dotenv_values(dotenv_path="../../config/.env")
     
     @property
-    def MQTTUser(self):
-        return self.config["MQTT_USER"]
+    def SumpProcessorCredentials(self):
+        return MQTTCredentials("SumpProcessor", self.config)
     
     @property
-    def MQTTPassword(self):
-        return self.config["MQTT_PWD"]
+    def SumpStatusCredentials(self):
+        return MQTTCredentials("SumpStatus", self.config)
+    
+    @property
+    def SumpDBWriteCredentials(self):
+        return MQTTCredentials("SumpDBWrite", self.config)
+    
+    @property
+    def SumpRPiCredentials(self):
+        return MQTTCredentials("SumpRPi", self.config)
+    
+    @property
+    def SumpTankWatcherCredentials(self):
+        return MQTTCredentials("SumpTankWatcher", self.config)
+    
+    @property
+    def SumpRelayCredentials(self):
+        return MQTTCredentials("SumpRelay", self.config)
+    
+    @property
+    def SumpButtonsCredentials(self):
+        return MQTTCredentials("SumpButtons", self.config)
