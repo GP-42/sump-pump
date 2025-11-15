@@ -18,7 +18,7 @@ class MQTTManager:
         return f"MQTT connection to host {self.hostname} on port {self.broker_port}, identified as client {self.client_id}. This client is {"NOT " if self.clean_session else str()}persistent."
     
     def __repr__(self) -> str:
-        return f"MQTTManager('{self.hostname}', {self.broker_port}, '{self.client_id}', {self.clean_session})"
+        return f"MQTTManager('{self.hostname}', {self.broker_port}, '{self.mqtt_user}', '{self.mqtt_password}', '{self.client_id}', {self.clean_session})"
     
     def _on_pre_connect(self, client, userdata):
         pass
@@ -48,7 +48,7 @@ class MQTTManager:
         pass
 
     def _safe_disconnect(self):
-        if self.client.is_connected:
+        if self.client.is_connected():
             self.client.disconnect()
     
     def publish(self, topic, message, retain):
@@ -68,6 +68,7 @@ class MQTTManager:
             else:
                 print(f"Failed to send message to topic {topic}")
         finally:
+            self.client.loop_stop()
             self._safe_disconnect()
     
     def subscribe(self, topic):
