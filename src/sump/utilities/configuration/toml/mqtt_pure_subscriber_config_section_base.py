@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-from utilities.configuration.toml.mqtt_config_section_base import MQTTConfigSectionBase
+from sump.utilities.configuration.toml.mqtt_config_section_base import MQTTConfigSectionBase
 
 class MQTTPureSubscriberConfigSectionBase(MQTTConfigSectionBase):
     def __init__(self, toml_config, section_name) -> None:

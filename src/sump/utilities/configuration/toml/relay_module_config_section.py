@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-from utilities.configuration.toml.gpio_config_section_base import GPIOConfigSectionBase
+from sump.utilities.configuration.toml.gpio_config_section_base import GPIOConfigSectionBase
 
 class RelayModuleConfigSection(GPIOConfigSectionBase):
     def __init__(self, toml_config) -> None:

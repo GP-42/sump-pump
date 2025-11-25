@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 from abc import ABCMeta
-from mqtt.mqtt_manager import MQTTManager
+from sump.mqtt.mqtt_manager import MQTTManager
 
 import traceback
 

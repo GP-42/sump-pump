@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 from abc import ABCMeta, abstractmethod
-from mqtt.mqtt_manager import MQTTManager
+from sump.mqtt.mqtt_manager import MQTTManager
 
 import time
 import traceback

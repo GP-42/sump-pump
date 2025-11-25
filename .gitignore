@@ -210,4 +210,5 @@ __marimo__/
 originals/
 *_check.txt*
 *.db3
+mqtt-*.service
 test.py

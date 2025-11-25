@@ -1,11 +1,11 @@
 #! /usr/bin/python3
 
-from core.measurement import Measurement, MeasurementDecoder
-from mqtt.exceptions import InvalidTopicError
-from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
-from utilities.configuration.classic.env_configuration import EnvConfiguration
-from utilities.configuration.toml.toml_configuration import TomlConfiguration
-from utilities.status import SystemStatusItem, SystemStatusItemDecoder
+from sump.core.measurement import Measurement, MeasurementDecoder
+from sump.mqtt.exceptions import InvalidTopicError
+from sump.mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from sump.utilities.configuration.classic.env_configuration import EnvConfiguration
+from sump.utilities.configuration.toml.toml_configuration import TomlConfiguration
+from sump.utilities.status import SystemStatusItem, SystemStatusItemDecoder
 
 import json
 

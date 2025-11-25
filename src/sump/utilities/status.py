@@ -3,9 +3,9 @@
 from contextlib import closing
 from enum import Enum, Flag
 from functools import total_ordering
-from utilities.formatters import get_formatted_now
-from utilities.generics import GenericJSONEncoder, GenericJSONDecoder
-from utilities.sequences import find
+from sump.utilities.formatters import get_formatted_now
+from sump.utilities.generics import GenericJSONEncoder, GenericJSONDecoder
+from sump.utilities.sequences import find
 
 import utilities.sqlite3db as db
 

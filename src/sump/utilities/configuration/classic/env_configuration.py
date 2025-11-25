@@ -1,8 +1,11 @@
 #! /usr/bin/python3
 
 from dotenv import dotenv_values
-from utilities.configuration.classic.mqtt_credentials import MQTTCredentials
-from utilities.configuration.configuration_base import ConfigurationBase
+from pathlib import Path
+from sump.utilities.configuration.classic.mqtt_credentials import MQTTCredentials
+from sump.utilities.configuration.classic.service_configuration import ServiceConfiguration
+from sump.utilities.configuration.configuration_base import ConfigurationBase
+from sump.utilities.files import get_project_root
 
 class EnvConfiguration(ConfigurationBase):
     # _instance = None
@@ -31,7 +34,8 @@ class EnvConfiguration(ConfigurationBase):
             return value
     
     def reload(self):
-        self.config = dotenv_values(dotenv_path="../../config/.env")
+        path_to_use = f"{get_project_root(Path(__file__))}/config/.env"
+        self.config = dotenv_values(dotenv_path=path_to_use)
     
     @property
     def SumpProcessorCredentials(self):
@@ -60,3 +64,7 @@ class EnvConfiguration(ConfigurationBase):
     @property
     def SumpButtonsCredentials(self):
         return MQTTCredentials("SumpButtons", self.config)
+    
+    @property
+    def Service(self):
+        return ServiceConfiguration(self.config)

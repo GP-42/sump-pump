@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 from filelock import FileLock, Timeout
-from utilities.formatters import get_formatted_now
+from sump.utilities.formatters import get_formatted_now
 
 import os
 import signal

@@ -1,11 +1,11 @@
 #! /usr/bin/python3
 
 #hcsr04_sensor
-from core.hcsr04_sensor import Hcsr04Sensor
+from sump.core.hcsr04_sensor import Hcsr04Sensor
 #A02YYUW_sensor
 #from core.A02YYUW_sensor import DFRobot_A02_Distance
-from core.measurement import Measurement
-from utilities.configuration.toml.toml_configuration import TomlConfiguration
+from sump.core.measurement import Measurement
+from sump.utilities.configuration.toml.toml_configuration import TomlConfiguration
 
 #A02YYUW_sensor
 #import time

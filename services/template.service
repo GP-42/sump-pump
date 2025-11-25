@@ -1,0 +1,15 @@
+[Unit]
+Description=Sump {UNIT_DESCRIPTION} MQTT Script Service
+BindsTo={UNIT_PREDECESSOR}.service
+After={UNIT_PREDECESSOR}.service
+
+[Service]
+Type=simple
+User={SERVICE_USER}
+ExecStart={SERVICE_PATH_TO_PYTHON} {SERVICE_WORKING_DIR}/{SERVICE_PYTHON_FILE}
+WorkingDirectory={SERVICE_WORKING_DIR}
+Restart=always
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

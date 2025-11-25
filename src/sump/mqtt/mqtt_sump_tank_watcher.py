@@ -1,13 +1,13 @@
 #! /usr/bin/python3
 
-from core.measurement import MeasurementEncoder
-from core.tank_watcher import TankWatcher
-from mqtt.exceptions import InvalidTopicError
-from mqtt.mqtt_publisher_base import MQTTPublisherBase
-from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
-from utilities.configuration.classic.env_configuration import EnvConfiguration
-from utilities.configuration.toml.toml_configuration import TomlConfiguration
-from utilities.status import DeviceStatus, LEDnames
+from sump.core.measurement import MeasurementEncoder
+from sump.core.tank_watcher import TankWatcher
+from sump.mqtt.exceptions import InvalidTopicError
+from sump.mqtt.mqtt_publisher_base import MQTTPublisherBase
+from sump.mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from sump.utilities.configuration.classic.env_configuration import EnvConfiguration
+from sump.utilities.configuration.toml.toml_configuration import TomlConfiguration
+from sump.utilities.status import DeviceStatus, LEDnames
 
 import json
 

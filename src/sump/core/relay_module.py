@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
-from utilities.generics import GenericJSONEncoder, GenericJSONDecoder
-from utilities.status import GeneralStatus
+from sump.utilities.generics import GenericJSONEncoder, GenericJSONDecoder
+from sump.utilities.status import GeneralStatus
 
 import RPi.GPIO as gpio
 

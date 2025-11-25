@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-from utilities.singleton import ThreadSafeSingletonMeta
+from sump.utilities.singleton import ThreadSafeSingletonMeta
 
 class ConfigurationBase(metaclass=ThreadSafeSingletonMeta):
     config = None

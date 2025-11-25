@@ -1,10 +1,10 @@
 #! /usr/bin/python3
 
-from core.relay_module import RelayDecoder
-from mqtt.mqtt_subscriber_base import MQTTSubscriberBase
-from utilities.configuration.classic.env_configuration import EnvConfiguration
-from utilities.configuration.toml.toml_configuration import TomlConfiguration
-from utilities.status import GeneralStatus
+from sump.core.relay_module import RelayDecoder
+from sump.mqtt.mqtt_subscriber_base import MQTTSubscriberBase
+from sump.utilities.configuration.classic.env_configuration import EnvConfiguration
+from sump.utilities.configuration.toml.toml_configuration import TomlConfiguration
+from sump.utilities.status import GeneralStatus
 
 import json
 import RPi.GPIO as gpio

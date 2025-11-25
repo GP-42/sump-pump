@@ -1,10 +1,10 @@
 #! /usr/bin/python3
 
 from contextlib import closing
-from utilities.formatters import get_formatted_now
-from utilities.generics import GenericJSONEncoder, GenericJSONDecoder
+from sump.utilities.formatters import get_formatted_now
+from sump.utilities.generics import GenericJSONEncoder, GenericJSONDecoder
 
-import utilities.sqlite3db as db
+import sump.utilities.sqlite3db as db
 
 class Measurement:
     def __init__(self, ts_measure = "", sensor_height = 0.0, readings = [], stdev = 0.000000, median = 0.000000, clean_data = [], with_outliers = 0.00, 

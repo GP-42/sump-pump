@@ -1,9 +1,12 @@
 #! /usr/bin/python3
 
+from pathlib import Path
+from sump.utilities.files import get_project_root
+
 import sqlite3
 
 class SQLite3DB:
-    def __init__(self, db_path : str = "../../data/PompPut.db3", commit_every_stmt : bool = False) -> None:
+    def __init__(self, db_path : str = f"{get_project_root(Path(__file__))}/data/PompPut.db3", commit_every_stmt : bool = False) -> None:
         self.isConnected = False
         self._connect(db_path)
         self.cursor = None
