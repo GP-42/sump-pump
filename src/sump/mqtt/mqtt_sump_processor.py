@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+from subprocess import check_output
 from sump.core.relay_module import RelayEncoder, RelayModule
 from sump.mqtt.exceptions import InvalidTopicError
 from sump.mqtt.mqtt_publisher_base import MQTTPublisherBase
@@ -26,6 +27,7 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
         self.timed_status = DeviceStatus.get_status_requiring_confirmation()
         self.active_timers = {}
         self.relay_module = RelayModule(self.TomlConfig.RelayModule.gpio_mode, self.TomlConfig.RelayModule.gpio_pins)
+        self.check_network_rpi()
     
     def on_message_callback(self, client, userdata, message):
         # print(f"Message topic: {message.topic}")
@@ -277,6 +279,16 @@ class MQTTSumpProcessor(MQTTSubscriberBase, MQTTPublisherBase):
     def initialize_system_status(self):        
         self.system_status.load_from_db()
         self.update_all_LEDs()
+    
+    def check_network_rpi(self):
+        status = DeviceStatus.NONE
+        lan_ip = check_output(['hostname', '-I'])
+        if lan_ip:
+            status = DeviceStatus.POWERED_AND_ONLINE
+        else:
+            status = DeviceStatus.POWERED_NO_NETWORK
+        
+        self.change_status_and_post(self.system_status.rpi, status)
 
 if __name__ == '__main__':
     MQTTSumpProcessor().start()
