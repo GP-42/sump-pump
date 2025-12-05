@@ -14,7 +14,12 @@
       something like ```/home/myUser/sump-pump/src/sump``` for this project
 3. Generate the service files by executing the Python script ```sump-pump/scripts/create_service_files.py```.
 4. The service files are created in the folder ```sump-pump/services```.
-
+  
+> [!IMPORTANT]
+> The command ```systemctl``` requires elevated privileges. You have to do either of the following:
+> - precede every single call with ```sudo```
+> - switch to an interactive login shell with root privileges using ```sudo -i```
+  
 ## Install the service files on RPi
 
 1. Copy the generated service files to the Systemd services folder: ```/lib/systemd/system```. (Adjust any file permissions of the generated service files if required.)
@@ -31,8 +36,3 @@
 
 1. Enable each service using this command: ```systemctl enable <service name>```.
 2. Congratulations! The services will now automatically run on startup.
-
-> [!IMPORTANT]
-> The command ```systemctl``` requires elevated privileges. You have to do either of the following:
-> - precede every single call with ```sudo```
-> - switch to an interactive login shell with root privileges using ```sudo -i```
