@@ -5,10 +5,6 @@ class ServiceConfiguration():
         self.config = config
     
     @property
-    def User(self):
-        return self.config["ServiceUser"]
-    
-    @property
     def PathToPython(self):
         return self.config["ServicePathToPython"]
     

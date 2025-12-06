@@ -12,6 +12,8 @@ setup(
         "paho-mqtt == 2.1.0",
         "pyserial == 3.5",
         "python-dotenv == 1.1.1",
-        "RPi.GPIO == 0.7.1"
+        "RPi.GPIO == 0.7.1",
+        "SecretStorage == 3.5.0",
+        "keyring == 25.7.0"
     ],  # Add dependencies here (e.g., "requests>=2.25.0")
 )

@@ -1,5 +1,7 @@
 #! /usr/bin/python3
 
+from sump.utilities.keyring import KeyRing
+
 class MQTTCredentials():
     def __init__(self, module_name : str, config) -> None:
         self.module = module_name
@@ -11,4 +13,6 @@ class MQTTCredentials():
     
     @property
     def MQTTPassword(self):
-        return self.config[f"MQTTPassword{self.module}"]
+        # return self.config[f"MQTTPassword{self.module}"]
+        module = f"MQTT{self.module}"
+        return KeyRing.get_password(module)
