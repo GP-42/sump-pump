@@ -5,4 +5,5 @@ The code of the TankWatcher and Hcsr04Sensor classes is mainly copied from the [
   
 # Documentation
 1. [Components](./docs/project/Components.md)
-2. [Services](./docs/project/Services.md)
+2. [How to setup keyring](./docs/project/Keyring.md)
+3. [Services](./docs/project/Services.md)
