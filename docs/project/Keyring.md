@@ -1,7 +1,7 @@
 # How to setup keyring
 
 > [!IMPORTANT]
-> I know that this setup requires an interactive user session for the services to run. However, I prefer this solution above having passwords in a clear text flat file like ```.env```.
+> I know that this setup requires an interactive user session for the services to run. However, I prefer this solution above having passwords in a clear text flat file like ```.env```.  
 > I'm still investigating on how to do this with a system service running a D-Bus session.
 
 ## Why using the PAM setup for keyring?
