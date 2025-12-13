@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 from filelock import FileLock, Timeout
+from sump.utilities.files import open_utf8
 from sump.utilities.formatters import get_formatted_now
 
 import os
@@ -22,7 +23,7 @@ class MainHelper():
         if not self.error_raised:
             if not self.cleaned_up:
                 with self.lock:
-                    with open(self.file_path, "a") as file:
+                    with open_utf8(self.file_path, "a") as file:
                         file.write(f"\nEnd: {get_formatted_now()}")
                 
                 self.cleaned_up = True
@@ -40,7 +41,7 @@ class MainHelper():
             try:
                 with self.lock:
                     print("Lock activated.")
-                    with open(self.file_path, "w") as file:
+                    with open_utf8(self.file_path, "w") as file:
                         file.write(f"Start: {get_formatted_now()}")
                         
                     MQTTSumpController().start()
